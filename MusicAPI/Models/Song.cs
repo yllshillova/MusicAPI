@@ -13,7 +13,11 @@ namespace MusicAPI.Models
         public DateTime UploadedDate { get; set; }
         public bool IsFeatured { get; set; }
         public string ImageURL { get; set; }
+        [NotMapped]
+        public IFormFile? Image { get; set; }
         public string? AudioUrl { get; set; }
+        [NotMapped]
+        public IFormFile? AudioFile { get; set; }
         public int ArtistId { get; set; }
         public int? AlbumId { get; set; }
     }
