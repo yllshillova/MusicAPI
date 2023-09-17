@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using MusicAPI.Data;
 using MusicAPI.Models;
+using System.Linq;
 
 namespace MusicAPI.Controllers
 {
@@ -26,8 +27,10 @@ namespace MusicAPI.Controllers
             return StatusCode(StatusCodes.Status201Created);
         }
         [HttpGet]
-        public async Task<IActionResult> GetAllSongs()
+        public async Task<IActionResult> GetAllSongs(int? pageNumber, int? pageSize)
         {
+            int currentPageNumber = pageNumber ?? 1;
+            int currentPageSize = pageSize ?? 5;
             var songs = await (from song in _context.Songs
                                 select new
                                 {
@@ -36,7 +39,7 @@ namespace MusicAPI.Controllers
                                     Duration = song.Duration,
                                     Image = song.ImageURL
                                 }).ToListAsync();
-            return Ok(songs);
+            return Ok(songs.Skip((currentPageNumber - 1)* currentPageSize).Take(currentPageSize));
         }
 
         [HttpGet("[action]")]
